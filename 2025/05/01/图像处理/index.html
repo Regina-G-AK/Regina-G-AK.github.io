@@ -41,6 +41,45 @@
     
     
         
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
     
 
 
@@ -260,19 +299,19 @@
 <ul>
 <li>Level 0</li>
 </ul>
-<p><a href="https://sm.ms/image/7XIZMhslQdY4PmJ" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/7XIZMhslQdY4PmJ.jpg" width=75%></a></p>
+<p><a href="https://sm.ms/image/7XIZMhslQdY4PmJ" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/7XIZMhslQdY4PmJ.jpg" width=75%></a></div></p>
 <ul>
 <li>Level 1</li>
 </ul>
-<p><a href="https://sm.ms/image/gHqX3FatMOLU2Q7" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/gHqX3FatMOLU2Q7.jpg" width=75%></a></p>
+<p><a href="https://sm.ms/image/gHqX3FatMOLU2Q7" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/gHqX3FatMOLU2Q7.jpg" width=60%></a></div></p>
 <ul>
 <li>Level 2</li>
 </ul>
-<p><a href="https://sm.ms/image/cksFLgvANlOwVb1" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/cksFLgvANlOwVb1.jpg" width=75%></a></p>
+<p><a href="https://sm.ms/image/cksFLgvANlOwVb1" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/cksFLgvANlOwVb1.jpg" width=45%></a></div></p>
 <ul>
 <li>Level 3</li>
 </ul>
-<p><a href="https://sm.ms/image/YZI2jyQzBubWDSL" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/YZI2jyQzBubWDSL.jpg" width=75%></a></p>
+<p><a href="https://sm.ms/image/YZI2jyQzBubWDSL" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/YZI2jyQzBubWDSL.jpg" width=30%></a></div></p>
 <ol start="2">
 <li>上采样和高斯滤波</li>
 </ol>
@@ -283,7 +322,7 @@
 <p>用当前层的高斯金字塔图像减去上采样并滤波后的图像，得到拉普拉斯金字塔的对应层。</p>
 <p>$$L_{\text{pyramid}}^{(k)} &#x3D; I_{\text{gaussian}}^{(k)} - \text{Gaussian}(\text{up_sample}(I_{\text{gaussian}}^{(k+1)}))$$</p>
 <p>以下左图为原图，右图为拉普拉斯金字塔重建效果。</p>
-<p><a href="https://sm.ms/image/ybMDtIA2U3ZzoPR" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/ybMDtIA2U3ZzoPR.jpg" width=75%></a></p>
+<p><a href="https://sm.ms/image/ybMDtIA2U3ZzoPR" target="_blank"><div style="text-align:center;"><img src="https://s2.loli.net/2025/05/03/ybMDtIA2U3ZzoPR.jpg" width=75%></a></div></p>
 
         </div>
 

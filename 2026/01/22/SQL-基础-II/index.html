@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Regina">
+
+
+
+
+
+<title>SQL 基础 (II) | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Regina&#39;s FM</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Regina&#39;s FM</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SQL 基础 (II)</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Regina</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 22, 2026&nbsp;&nbsp;1:01:08</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SQL/">SQL</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="一、逻辑处理"><a href="#一、逻辑处理" class="headerlink" title="一、逻辑处理"></a>一、逻辑处理</h1><h2 id="1-1-CASE-WHEN"><a href="#1-1-CASE-WHEN" class="headerlink" title="1.1 CASE WHEN"></a>1.1 CASE WHEN</h2><ol>
+<li><strong>查询函数形式</strong>：在 WHEN 后面写任何复杂的逻辑表达式（比如比较大小、使用 <code>AND/OR</code>、模糊查询等）。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    name, </span><br><span class="line">    score,</span><br><span class="line">    <span class="keyword">CASE</span> </span><br><span class="line">        <span class="keyword">WHEN</span> score <span class="operator">&gt;=</span> <span class="number">90</span> <span class="keyword">THEN</span> <span class="string">&#x27;优秀&#x27;</span></span><br><span class="line">        <span class="keyword">WHEN</span> score <span class="operator">&gt;=</span> <span class="number">60</span> <span class="keyword">THEN</span> <span class="string">&#x27;及格&#x27;</span></span><br><span class="line">        <span class="keyword">ELSE</span> <span class="string">&#x27;不及格&#x27;</span></span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">AS</span> grade</span><br><span class="line"><span class="keyword">FROM</span> Students;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 1: CASE WHEN查询示例</p>
+<ol start="2">
+<li><strong>简单函数形式</strong>：主要用于<strong>等值判断</strong>，即判断某个字段是否等于某个具体的值。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    name,</span><br><span class="line">    <span class="keyword">CASE</span> gender</span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="string">&#x27;男&#x27;</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">2</span> <span class="keyword">THEN</span> <span class="string">&#x27;女&#x27;</span></span><br><span class="line">        <span class="keyword">ELSE</span> <span class="string">&#x27;其他&#x27;</span></span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">AS</span> sex</span><br><span class="line"><span class="keyword">FROM</span> Users;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 2: CASE WHEN函数示例</p>
+<p><em>注意：CASE WHEN 是从上到下依次判断的。一旦满足了某个条件，就会返回对应的结果，不再看后面的条件；THEN 后面返回的所有值，数据类型必须是一致的。</em></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">    <span class="keyword">case</span> </span><br><span class="line">        <span class="keyword">when</span> <span class="built_in">mod</span>(id, <span class="number">2</span>)<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> id<span class="operator">&lt;</span>(<span class="keyword">select</span> <span class="built_in">max</span>(id) <span class="keyword">from</span> Seat) <span class="keyword">then</span> id<span class="operator">+</span><span class="number">1</span></span><br><span class="line">        <span class="keyword">when</span> <span class="built_in">mod</span>(id, <span class="number">2</span>)<span class="operator">=</span><span class="number">0</span> <span class="keyword">then</span> id<span class="number">-1</span></span><br><span class="line">        <span class="keyword">else</span> id </span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">as</span> id,</span><br><span class="line">    student</span><br><span class="line"><span class="keyword">from</span> Seat</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> id <span class="keyword">asc</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 3: 交换每两个连续的学生的座位号，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/exchange-seats/?envType=study-plan-v2&envId=sql-free-50">leetcode626</a></p>
+<h1 id="二、窗口函数"><a href="#二、窗口函数" class="headerlink" title="二、窗口函数"></a>二、窗口函数</h1><ol>
+<li><strong>移动平均+滚动聚合</strong>：<code>ROWS BETWEEN 6 PRECEDING AND CURRENT ROW</code>窗口范围限定了计算范围；<code>DENSE_RANK</code>可以过滤掉前6条数据。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    visited_on, </span><br><span class="line">    amount, </span><br><span class="line">    ROUND(amount <span class="operator">/</span> <span class="number">7</span>, <span class="number">2</span>) <span class="keyword">AS</span> average_amount</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        visited_on,</span><br><span class="line">        <span class="comment">-- 计算当前行及前 6 行的累计总和</span></span><br><span class="line">        <span class="built_in">SUM</span>(day_sum) <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> visited_on <span class="keyword">ROWS</span> <span class="keyword">BETWEEN</span> <span class="number">6</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span>) <span class="keyword">AS</span> amount,</span><br><span class="line">        <span class="comment">-- 记录当前是第几天，用于过滤前 6 天的数据</span></span><br><span class="line">        <span class="built_in">DENSE_RANK</span>() <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> visited_on) <span class="keyword">AS</span> rnk</span><br><span class="line">    <span class="keyword">FROM</span> (</span><br><span class="line">        <span class="comment">-- 第一步：先把每天的总消费额算出来</span></span><br><span class="line">        <span class="keyword">SELECT</span> visited_on, <span class="built_in">SUM</span>(amount) <span class="keyword">AS</span> day_sum</span><br><span class="line">        <span class="keyword">FROM</span> Customer</span><br><span class="line">        <span class="keyword">GROUP</span> <span class="keyword">BY</span> visited_on</span><br><span class="line">    ) <span class="keyword">AS</span> daily_stats</span><br><span class="line">) <span class="keyword">AS</span> rolling_stats</span><br><span class="line"><span class="comment">-- 第二步：只有当日期排在第 7 天或之后，才会有完整的 7 天窗口</span></span><br><span class="line"><span class="keyword">WHERE</span> rnk <span class="operator">&gt;=</span> <span class="number">7</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 4: 餐厅7天营业额，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/restaurant-growth/?envType=study-plan-v2&envId=sql-free-50">leetcode1321</a></p>
+<ol start="2">
+<li><strong>多维条件判断</strong>：使用多种属性进行逻辑判断时，可以使用窗口函数。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ROUND(<span class="built_in">SUM</span>(tiv_2016), <span class="number">2</span>) <span class="keyword">AS</span> tiv_2016</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        tiv_2016,</span><br><span class="line">        <span class="comment">-- 计算 tiv_2015 相同的行数</span></span><br><span class="line">        <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> tiv_2015) <span class="keyword">AS</span> count_2015,</span><br><span class="line">        <span class="comment">-- 计算 经纬度组合 相同的行数</span></span><br><span class="line">        <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> lat, lon) <span class="keyword">AS</span> count_location</span><br><span class="line">    <span class="keyword">FROM</span> Insurance</span><br><span class="line">) <span class="keyword">AS</span> t</span><br><span class="line"><span class="keyword">WHERE</span> count_2015 <span class="operator">&gt;</span> <span class="number">1</span> <span class="keyword">AND</span> count_location <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 5: 多属性条件判断，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/investments-in-2016/?envType=study-plan-v2&envId=sql-free-50">leetcode585</a></p>
+<ol start="3">
+<li><strong>Top-N问题</strong>：不能在定义窗口函数的同层查询中使用它的别名进行过滤。在Top-N问题中，必须套一层子查询，先算出排名，再在外面过滤。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    Department, </span><br><span class="line">    Employee, </span><br><span class="line">    Salary</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        D.name <span class="keyword">AS</span> Department,</span><br><span class="line">        E.name <span class="keyword">AS</span> Employee,</span><br><span class="line">        E.salary <span class="keyword">AS</span> Salary,</span><br><span class="line">        <span class="built_in">dense_rank</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> D.id <span class="keyword">ORDER</span> <span class="keyword">BY</span> E.salary <span class="keyword">DESC</span>) <span class="keyword">AS</span> rnk </span><br><span class="line">    <span class="keyword">FROM</span> Employee E </span><br><span class="line">    <span class="keyword">JOIN</span> Department D <span class="keyword">ON</span> E.departmentId <span class="operator">=</span> D.id </span><br><span class="line">) <span class="keyword">AS</span> t</span><br><span class="line"><span class="keyword">WHERE</span> rnk <span class="operator">&lt;=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 6: 部门工资前三高的员工，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/department-top-three-salaries/?envType=study-plan-v2&envId=sql-free-50">leetcode185</a></p>
+<h1 id="三、双向关联"><a href="#三、双向关联" class="headerlink" title="三、双向关联"></a>三、双向关联</h1><p>类似“好友关系”、“比赛对阵”、“转账双方”这种数据分布在两列、且身份可以互换的场景时：</p>
+<ol>
+<li><p>用 <code>SELECT A FROM table UNION ALL SELECT B FROM table</code> 将两列化为一列。</p>
+</li>
+<li><p>对外层结果进行 <code>GROUP BY</code> 和 <code>COUNT</code>。</p>
+</li>
+</ol>
+<p><em>注意：使用UNION ALL可以保留含有重复的列，适用于双向关联的问题。</em></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    id, </span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> num</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="comment">-- 将发起者列和接受者列纵向合并</span></span><br><span class="line">    <span class="keyword">SELECT</span> requester_id <span class="keyword">AS</span> id <span class="keyword">FROM</span> RequestAccepted</span><br><span class="line">    <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">    <span class="keyword">SELECT</span> accepter_id <span class="keyword">AS</span> id <span class="keyword">FROM</span> RequestAccepted</span><br><span class="line">) <span class="keyword">AS</span> all_ids</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> num <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 7: 拥有好友数量最多的人，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/friend-requests-ii-who-has-the-most-friends/?envType=study-plan-v2&envId=sql-free-50">leetcode602</a></p>
+<h1 id="四、字符串函数"><a href="#四、字符串函数" class="headerlink" title="四、字符串函数"></a>四、字符串函数</h1><ol>
+<li><p><strong>转换大小写</strong>：<code>LOWER()</code>将字符串转换成小写，<code>UPPER()</code>将字符串转换成大写。</p>
+</li>
+<li><p><strong>字符串连接</strong>：<code>CONCAT()</code>将两个&#x2F;多个字符串拼接。</p>
+</li>
+<li><p><strong>纵向合并多行至一行</strong>：<code>GROUP_CONCAT(feature, SEPARATOR c)</code>将多个特征值拼接到一起，并且采用字符<code>c</code>作为分隔符。</p>
+</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    sell_date,</span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> product) <span class="keyword">AS</span> num_sold,</span><br><span class="line">    GROUP_CONCAT(</span><br><span class="line">        <span class="keyword">DISTINCT</span> product </span><br><span class="line">        <span class="keyword">ORDER</span> <span class="keyword">BY</span> product </span><br><span class="line">        SEPARATOR <span class="string">&#x27;,&#x27;</span></span><br><span class="line">    ) <span class="keyword">AS</span> products</span><br><span class="line"><span class="keyword">FROM</span> Activities</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> sell_date</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> sell_date;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 8: 多个特征值拼接，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/group-sold-products-by-the-date/?envType=study-plan-v2&envId=sql-free-50">leetcode1484</a></p>
+<ol start="4">
+<li><p><strong>去空格</strong>：<code>LTRIM()</code>将字符串左侧空格去除，<code>RTRIM()</code>将字符串右侧空格去除。</p>
+</li>
+<li><p><strong>取子串</strong>：<code>SUBSTRING(&lt;expression&gt;, &lt;starting_position&gt;, length)</code>返回从字符串左边第starting_position 个字符起length个字符的部分。</p>
+</li>
+<li><p><strong>重复</strong>：<code>REPLICATE(&lt;expression&gt;, n)</code>返回一个重复expression指定次数n的字符串。</p>
+</li>
+<li><p><strong>替换</strong>：<code>REPLACE(&lt;string_expression1&gt;, &lt;string_expression2&gt;, &lt;string_expression3&gt;)</code> 用string_expression3 替换在string_expression1 中的子串string_expression2。</p>
+</li>
+<li><p><strong>翻转</strong>：将指定的字符串的字符排列顺序颠倒。<code>REVERSE(&lt;character_expression&gt;)</code>其中character_expression可以是字符串、常数或一个列的值。</p>
+</li>
+</ol>
+<h1 id="五、正则表达式"><a href="#五、正则表达式" class="headerlink" title="五、正则表达式"></a>五、正则表达式</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> Patients</span><br><span class="line"><span class="comment">-- 以 DIAB1 开头，空格后紧跟 DIAB1</span></span><br><span class="line"><span class="keyword">WHERE</span> conditions REGEXP <span class="string">&#x27;^DIAB1| DIAB1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 9: 开头正则匹配，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/patients-with-a-condition/?envType=study-plan-v2&envId=sql-free-50">leetcode1527</a></p>
+<p><code>REGEXP_LIKE(source_string, pattern, match_parameter)</code>：match_parameter（可选）匹配控制参数：</p>
+<ul>
+<li><p>‘i’: 不区分大小写；</p>
+</li>
+<li><p>‘c’: 区分大小写；</p>
+</li>
+<li><p>‘m’: 多行模式。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> Users</span><br><span class="line"><span class="keyword">WHERE</span> REGEXP_LIKE(mail, <span class="string">&#x27;^[A-Za-z][A-Za-z0-9_.-]*@leetcode\\.com$&#x27;</span>, <span class="string">&#x27;c&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Listing 10: 查找有效邮箱正则匹配，<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-users-with-valid-e-mails/?envType=study-plan-v2&envId=sql-free-50">leetcode1517</a></p>
+<table>
+<thead>
+<tr>
+<th>正则表达式</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\d</td>
+<td>匹配任意数字（等价于 [0-9]）</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配任意非数字字符（等价于 [^0-9]）</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配任意字母、数字或下划线（等价于 [a-zA-Z0-9_]）</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配任意非字母、数字或下划线的字符（等价于 [^a-zA-Z0-9_]）</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任意空白字符（如空格、制表符、换行符等）</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任意非空白字符</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配单词边界</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>匹配非单词边界</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配制表符</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意单个字符（除换行符外）</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的字符或子表达式零次或多次</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的字符或子表达式一次或多次</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的字符或子表达式零次或一次</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>匹配前面的字符或子表达式恰好 n 次</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>匹配前面的字符或子表达式至少 n 次</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>匹配前面的字符或子表达式至少 n 次，最多 m 次</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配字符串的开头</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配字符串的结尾</td>
+</tr>
+<tr>
+<td>[abc]</td>
+<td>匹配字符集合中的任意一个字符（如 a、b 或 c）</td>
+</tr>
+<tr>
+<td>[^abc]</td>
+<td>匹配不在字符集合中的任意一个字符</td>
+</tr>
+<tr>
+<td>[a-z]</td>
+<td>匹配任意一个小写字母</td>
+</tr>
+<tr>
+<td>[A-Z]</td>
+<td>匹配任意一个大写字母</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>匹配任意一个数字</td>
+</tr>
+<tr>
+<td>\1</td>
+<td>匹配第一个捕获组的内容（用于反向引用）</td>
+</tr>
+<tr>
+<td>\2</td>
+<td>匹配第二个捕获组的内容（用于反向引用）</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配第 n 个捕获组的内容（用于反向引用）</td>
+</tr>
+<tr>
+<td>(pattern)</td>
+<td>定义一个捕获组，用于捕获匹配的内容</td>
+</tr>
+<tr>
+<td>(?:pattern)</td>
+<td>定义一个非捕获组，不保存匹配的内容</td>
+</tr>
+<tr>
+<td>|</td>
+<td>表示逻辑“或”操作</td>
+</tr>
+</tbody></table>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Regina</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2026/01/22/SQL-%E5%9F%BA%E7%A1%80-II/">http://example.com/2026/01/22/SQL-%E5%9F%BA%E7%A1%80-II/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/SQL/"># SQL</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2026/01/19/SQL-%E5%9F%BA%E7%A1%80-I/">SQL 基础 (I)</a>
+            
+        </section>
+
+
+    </article>
+    <script src="https://giscus.app/client.js"
+        data-repo="Regina-G-AK/Regina-G-AK.github.io"
+        data-repo-id="R_kgDONo7kgg"
+        data-category="General"
+        data-category-id="DIC_kwDONo7kgs4Cqtra"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+    </script>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Regina | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

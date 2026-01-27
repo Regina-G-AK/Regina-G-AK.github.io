@@ -5,3 +5,10 @@
   font-weight: 300;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Microsoft YaHei';
+  src: url("../fonts/yahei/yahei.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

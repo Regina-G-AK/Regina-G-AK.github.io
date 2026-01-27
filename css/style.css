@@ -149,6 +149,13 @@ template {
   font-weight: 300;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Microsoft YaHei';
+  src: url("../fonts/yahei/yahei.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 html {
   font-family: 'Microsoft YaHei', '微软雅黑', PingFang SC, Lantinghei SC, 'lanting', 'Segoe UI', Arial, sans-serif;
 }

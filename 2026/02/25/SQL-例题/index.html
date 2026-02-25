@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Regina">
+
+
+
+
+
+<title>SQL 例题 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Regina&#39;s FM</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Regina&#39;s FM</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SQL 例题</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Regina</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 25, 2026&nbsp;&nbsp;11:09:08</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/SQL/">SQL</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="1-连续性问题"><a href="#1-连续性问题" class="headerlink" title="1 连续性问题"></a>1 连续性问题</h1><h2 id="1-体育馆的人流量"><a href="#1-体育馆的人流量" class="headerlink" title="1. 体育馆的人流量"></a>1. 体育馆的人流量</h2><p>找出每行的人数大于或等于100且id连续的三行或更多行记录。</p>
+<ul>
+<li><p>使用WITH建立一个临时表，先把人流量≥100 的行拿出来，并给它们重新排序(rn)。</p>
+</li>
+<li><p>寻找等差数列：若<code>id</code>连续增长，则<code>id-rn</code>差值<code>diff</code>会保持常值。</p>
+</li>
+<li><p>最终筛选满足3天及以上的记录，diff&gt;&#x3D;3。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> temp <span class="keyword">AS</span> (</span><br><span class="line"><span class="comment">-- 第一步:筛选符合条件的行,并生成连续行号</span></span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    id,</span><br><span class="line">    visit_date,</span><br><span class="line">    people,</span><br><span class="line">    <span class="comment">-- id 是原始序号,rn 是过滤后的新序号</span></span><br><span class="line">    id <span class="operator">-</span> <span class="built_in">ROW_NUMBER</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> id) <span class="keyword">AS</span> diff</span><br><span class="line">    <span class="keyword">FROM</span> Stadium</span><br><span class="line">    <span class="keyword">WHERE</span> people <span class="operator">&gt;=</span> <span class="number">100</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">-- 第二步:通过窗口函数统计每个diff 分组出现的次数</span></span><br><span class="line"><span class="keyword">SELECT</span> id, visit_date , people</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="operator">*</span>,</span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> diff) <span class="keyword">AS</span> group_count</span><br><span class="line">    <span class="keyword">FROM</span> temp</span><br><span class="line">) <span class="keyword">AS</span> <span class="keyword">result</span></span><br><span class="line"><span class="keyword">WHERE</span> group_count <span class="operator">&gt;=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> visit_date;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 1: 体育馆的人流量</p>
+<h2 id="2-连续三日以上购物顾客"><a href="#2-连续三日以上购物顾客" class="headerlink" title="2. 连续三日以上购物顾客"></a>2. 连续三日以上购物顾客</h2><p>找出连续三日及以上的购物顾客，输出id。</p>
+<ul>
+<li><p>将<code>transaction_date</code>减去它的排名<code>ROW_NUMBER()</code>。</p>
+</li>
+<li><p>如果日期是连续的，日期与排名的差值将会是一个固定日期。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> date_groups <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    user_id,</span><br><span class="line">    transaction_date,</span><br><span class="line">    <span class="comment">-- 将时间截断为天,减去按顺序排列的行号(单位:天)</span></span><br><span class="line">    <span class="built_in">CAST</span>(transaction_date <span class="keyword">AS</span> <span class="type">DATE</span>) <span class="operator">-</span> <span class="built_in">CAST</span>(<span class="built_in">ROW_NUMBER</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> user_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> transaction_date) <span class="keyword">AS</span> <span class="type">INT</span>) <span class="keyword">AS</span> grp</span><br><span class="line">    <span class="keyword">FROM</span> (</span><br><span class="line">    <span class="comment">-- 考虑到同一天可能有多次交易,先去重</span></span><br><span class="line">    <span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> user_id , <span class="built_in">CAST</span>(transaction_date <span class="keyword">AS</span> <span class="type">DATE</span>)</span><br><span class="line">    <span class="keyword">AS</span> transaction_date</span><br><span class="line">    <span class="keyword">FROM</span> transactions</span><br><span class="line">    ) sub</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> user_id</span><br><span class="line"><span class="keyword">FROM</span> date_groups</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> user_id , grp</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="operator">&gt;=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> user_id;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 2: 连续三日购物顾客, PostgreSQL</p>
+<h2 id="3-时间差值"><a href="#3-时间差值" class="headerlink" title="3. 时间差值"></a>3. 时间差值</h2><p>编写一个查询，获取在距离上次通话7天内再次拨打电话的唯一呼叫者数量。若呼叫者在7 天内拨打超过两次电话，则仅计数一次。使用窗口函数解决的核心思路是：将下一条或前一条记录的时间戳通过<code>LEAD</code>或<code>LAG</code>函数拉到当前行，然后进行日期差值计算。</p>
+<ul>
+<li><p>按<code>user_id</code>分组，并按<code>call_date</code>升序排列。</p>
+</li>
+<li><p>使用<code>LEAD(date, 1)</code>将该用户下一次访问的日期取到当前行。</p>
+</li>
+<li><p>计算下一次日期与当前日期的天数差。</p>
+</li>
+<li><p>在子查询或<code>CTE</code>之外，筛选差值小于7的记录。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> diff_callers <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    policy_holder_id,</span><br><span class="line">    call_date,</span><br><span class="line">    <span class="built_in">LEAD</span>(call_date , <span class="number">1</span>) <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> policy_holder_id</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> call_date) <span class="keyword">AS</span> next_call_date</span><br><span class="line">    <span class="keyword">FROM</span> callers</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> policy_holder_id) <span class="keyword">AS</span> policy_holder_count</span><br><span class="line"><span class="keyword">FROM</span> diff_callers</span><br><span class="line"><span class="keyword">WHERE</span> next_call_date <span class="operator">-</span>call_date <span class="operator">&lt;</span><span class="type">INTERVAL</span> <span class="string">&#x27;7 days&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 3: 7 日内两次打电话的用户数量,PostgreSQL</p>
+<h1 id="2-双层聚合问题"><a href="#2-双层聚合问题" class="headerlink" title="2 双层聚合问题"></a>2 双层聚合问题</h1><h2 id="1-员工查询次数"><a href="#1-员工查询次数" class="headerlink" title="1. 员工查询次数"></a>1. 员工查询次数</h2><p>找出不同查询次数的员工数量。</p>
+<ul>
+<li><p>使用<code>WITH</code>建立一个临时表，先统计每个员工在2023年Q3运行的唯一查询数。</p>
+</li>
+<li><p>按查询次数分组，统计落在每个桶里的员工人数。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> employee_query_counts <span class="keyword">AS</span> (</span><br><span class="line"><span class="comment">-- 第一层:统计每个员工在2023 年Q3 运行的唯一查询数</span></span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    e.employee_id,</span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> q.query_id) <span class="keyword">AS</span> unique_queries</span><br><span class="line">    <span class="keyword">FROM</span> employees e</span><br><span class="line">    <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> queries q</span><br><span class="line">    <span class="keyword">ON</span> e.employee_id <span class="operator">=</span> q.employee_id</span><br><span class="line">    <span class="keyword">AND</span> q.query_starttime <span class="operator">&gt;=</span> <span class="string">&#x27;2023-07-01&#x27;</span></span><br><span class="line">    <span class="keyword">AND</span> q.query_starttime <span class="operator">&lt;</span> <span class="string">&#x27;2023-10-01&#x27;</span></span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> e.employee_id</span><br><span class="line">)</span><br><span class="line"><span class="comment">-- 第二层:按“查询次数” 分组,统计落在每个桶里的“员工人数”</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">unique_queries,</span><br><span class="line"><span class="built_in">COUNT</span>(employee_id) <span class="keyword">AS</span> employee_count</span><br><span class="line"><span class="keyword">FROM</span> employee_query_counts</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> unique_queries</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> unique_queries;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 4: 员工查询次数</p>
+<h2 id="2-Top-N-问题"><a href="#2-Top-N-问题" class="headerlink" title="2. Top-N 问题"></a>2. Top-N 问题</h2><p>找出每个类别下top2的商品总支出。</p>
+<ul>
+<li><p>第一层：先用<code>GROUP BY</code>算出每个产品的总支出。</p>
+</li>
+<li><p>第二层：使用窗口函数对总支出进行排名。</p>
+</li>
+<li><p>第三层：过滤排名，只取前两名。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> product_summary <span class="keyword">AS</span> (</span><br><span class="line"><span class="comment">-- 第一步:计算每个产品在2022 年的总支出</span></span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    category,</span><br><span class="line">    product,</span><br><span class="line">    <span class="built_in">SUM</span>(spend) <span class="keyword">AS</span> total_spend</span><br><span class="line">    <span class="keyword">FROM</span> product_spend</span><br><span class="line">    <span class="keyword">WHERE</span> transaction_date <span class="operator">&gt;=</span> <span class="string">&#x27;2022-01-01&#x27;</span> <span class="keyword">AND</span> transaction_date <span class="operator">&lt;</span> <span class="string">&#x27;2023-01-01&#x27;</span></span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> category , product</span><br><span class="line">),</span><br><span class="line">ranked_products <span class="keyword">AS</span> (</span><br><span class="line"><span class="comment">-- 第二步:在每个类别内,按总支出进行排名</span></span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    category,</span><br><span class="line">    product,</span><br><span class="line">    total_spend,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span> (</span><br><span class="line">    <span class="keyword">PARTITION</span> <span class="keyword">BY</span> category</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> total_spend <span class="keyword">DESC</span></span><br><span class="line">    ) <span class="keyword">AS</span> rnk</span><br><span class="line">    <span class="keyword">FROM</span> product_summary</span><br><span class="line">)</span><br><span class="line"><span class="comment">-- 第三步:筛选出每个类别的前两名</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">category,</span><br><span class="line">product,</span><br><span class="line">total_spend</span><br><span class="line"><span class="keyword">FROM</span> ranked_products</span><br><span class="line"><span class="keyword">WHERE</span> rnk <span class="operator">&lt;=</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> category , rnk;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 5: 每个类别下top2 的商品总支出</p>
+<h1 id="3-滑动窗口问题"><a href="#3-滑动窗口问题" class="headerlink" title="3 滑动窗口问题"></a>3 滑动窗口问题</h1><h2 id="1-滑动窗口平均"><a href="#1-滑动窗口平均" class="headerlink" title="1. 滑动窗口平均"></a>1. 滑动窗口平均</h2><p>计算出每个用户在三日内的滑动平均发推率。</p>
+<ul>
+<li><p><code>PARTITION BY user_id</code>: 确保计算是在每个用户内部独立进行的，不同用户的数据不会互相干扰。</p>
+</li>
+<li><p><code>ORDER BY tweet_date</code>: 必须按时间排序，前两行有时间意义。</p>
+</li>
+<li><p><code>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</code>: 2 PRECEDING: 向上寻找2行。CURRENT ROW: 当前行。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    user_id ,</span><br><span class="line">    tweet_date ,</span><br><span class="line">    ROUND(</span><br><span class="line">    <span class="built_in">AVG</span>(tweet_count) <span class="keyword">OVER</span> (</span><br><span class="line">    <span class="keyword">PARTITION</span> <span class="keyword">BY</span> user_id</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> tweet_date</span><br><span class="line">    <span class="keyword">ROWS</span> <span class="keyword">BETWEEN</span> <span class="number">2</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span></span><br><span class="line">    ), <span class="number">2</span>) <span class="keyword">AS</span> rolling_avg_3d</span><br><span class="line"><span class="keyword">FROM</span> tweets;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 6: 三日滑动平均发推次数</p>
+<h2 id="2-双向累计求和"><a href="#2-双向累计求和" class="headerlink" title="2. 双向累计求和"></a>2. 双向累计求和</h2><p>计算搜索数的中位数。</p>
+<p>一个数字如果是中位数，必须满足两个条件：</p>
+<ul>
+<li><p>正向累计频次≥总人数的一半</p>
+</li>
+<li><p>逆向累计频次≥总人数的一半</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> summary <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">    searches,</span><br><span class="line">    <span class="comment">-- 1. 正向累计:从searches 小的加到大的</span></span><br><span class="line">    <span class="built_in">SUM</span>(num_users) <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> searches) <span class="keyword">AS</span> asc_sum,</span><br><span class="line">    <span class="comment">-- 2. 逆向累计:从searches 大的加到小的</span></span><br><span class="line">    <span class="built_in">SUM</span>(num_users) <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> searches <span class="keyword">DESC</span>) <span class="keyword">AS</span> desc_sum,</span><br><span class="line">    <span class="comment">-- 3. 总人数</span></span><br><span class="line">    <span class="built_in">SUM</span>(num_users) <span class="keyword">OVER</span>() <span class="keyword">AS</span> total_users</span><br><span class="line">    <span class="keyword">FROM</span> search_frequency</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="comment">-- 4. 取符合条件行的searches 平均值(处理偶数情况)</span></span><br><span class="line">ROUND(<span class="built_in">AVG</span>(searches), <span class="number">1</span>) <span class="keyword">AS</span> median</span><br><span class="line"><span class="keyword">FROM</span> summary</span><br><span class="line"><span class="keyword">WHERE</span> asc_sum <span class="operator">&gt;=</span> total_users <span class="operator">/</span> <span class="number">2.0</span></span><br><span class="line"><span class="keyword">AND</span> desc_sum <span class="operator">&gt;=</span> total_users <span class="operator">/</span> <span class="number">2.0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 7: 寻找搜索数的中位数</p>
+<h1 id="4-条件过滤聚合问题"><a href="#4-条件过滤聚合问题" class="headerlink" title="4 条件过滤聚合问题"></a>4 条件过滤聚合问题</h1><h2 id="1-单日区分奇偶聚合"><a href="#1-单日区分奇偶聚合" class="headerlink" title="1. 单日区分奇偶聚合"></a>1. 单日区分奇偶聚合</h2><p>找出单日内的奇偶次数并分开求和。</p>
+<ul>
+<li><p>首先根据测量时间对测量数据进行排序，并使用<code>ROW_NUMBER窗口函数</code>按天进行分区。</p>
+</li>
+<li><p>过滤与聚合。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> ranked_measurements <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">        <span class="built_in">CAST</span>(measurement_time <span class="keyword">AS</span> <span class="type">DATE</span>) <span class="keyword">AS</span> measurement_day,</span><br><span class="line">        measurement_value,</span><br><span class="line">        <span class="built_in">ROW_NUMBER</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> <span class="built_in">CAST</span>(measurement_time <span class="keyword">AS</span> <span class="type">DATE</span>) <span class="keyword">ORDER</span> <span class="keyword">BY</span> measurement_time) <span class="keyword">AS</span> measurement_num</span><br><span class="line">    <span class="keyword">FROM</span> measurements</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">measurement_day,</span><br><span class="line"><span class="built_in">SUM</span>(measurement_value) <span class="keyword">FILTER</span> (<span class="keyword">WHERE</span> measurement_num <span class="operator">%</span> <span class="number">2</span><span class="operator">!=</span> <span class="number">0</span>) <span class="keyword">AS</span> odd_sum,</span><br><span class="line"><span class="built_in">SUM</span>(measurement_value) <span class="keyword">FILTER</span> (<span class="keyword">WHERE</span> measurement_num <span class="operator">%</span> <span class="number">2</span><span class="operator">=</span> <span class="number">0</span>) <span class="keyword">AS</span> even_sum</span><br><span class="line"><span class="keyword">FROM</span> ranked_measurements</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> measurement_day;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 8: Odd and Even Measurements, PostgreSQL</p>
+<h2 id="2-股票开盘价最高点与最低点"><a href="#2-股票开盘价最高点与最低点" class="headerlink" title="2. 股票开盘价最高点与最低点"></a>2. 股票开盘价最高点与最低点</h2><p>找出公司股票开盘价最高点与最低点以及其分别对应的年份月份。难点在于找出某列最大&#x2F;小值对应的另一列数据。</p>
+<ul>
+<li><p><code>DISTINCT ON (ticker)</code>：每个<code>ticker</code>只返回一行。</p>
+</li>
+<li><p>使用两个<code>CTE</code>分别计算最大值和最小值及其日期，然后通过<code>JOIN</code>连接。</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> highest_prices <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> <span class="keyword">ON</span> (ticker)</span><br><span class="line">    ticker ,</span><br><span class="line">    <span class="keyword">open</span> <span class="keyword">AS</span> highest_open ,</span><br><span class="line">    TO_CHAR(<span class="type">date</span>, <span class="string">&#x27;Mon-YYYY&#x27;</span>) <span class="keyword">AS</span> highest_mth</span><br><span class="line">    <span class="keyword">FROM</span> stock_prices</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> ticker , <span class="keyword">open</span> <span class="keyword">DESC</span> <span class="comment">-- 按价格降序,取第一条,即最高价</span></span><br><span class="line">),</span><br><span class="line">lowest_prices <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> <span class="keyword">ON</span> (ticker)</span><br><span class="line">    ticker,</span><br><span class="line">    <span class="keyword">open</span> <span class="keyword">AS</span> lowest_open,</span><br><span class="line">    TO_CHAR(<span class="type">date</span>, <span class="string">&#x27;Mon-YYYY&#x27;</span>) <span class="keyword">AS</span> lowest_mth</span><br><span class="line">    <span class="keyword">FROM</span> stock_prices</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> ticker , <span class="keyword">open</span> <span class="keyword">ASC</span> <span class="comment">-- 按价格升序,取第一条,即最低价</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> h.ticker,</span><br><span class="line">h.highest_mth,</span><br><span class="line">h.highest_open,</span><br><span class="line">l.lowest_mth,</span><br><span class="line">l.lowest_open</span><br><span class="line"><span class="keyword">FROM</span> highest_prices h</span><br><span class="line"><span class="keyword">JOIN</span> lowest_prices l <span class="keyword">ON</span> h.ticker <span class="operator">=</span> l.ticker</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> h.ticker;</span><br></pre></td></tr></table></figure>
+
+<p>Listing 9: 找出股票最高开盘价与最低开盘价及对应日期, PostgreSQL</p>
+<p>若使用MySQL写本题代码，可以使用<code>ROW_NUMBER+窗口函数</code>解决。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Regina</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2026/02/25/SQL-%E4%BE%8B%E9%A2%98/">http://example.com/2026/02/25/SQL-%E4%BE%8B%E9%A2%98/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/SQL/"># SQL</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2026/01/22/SQL-%E5%9F%BA%E7%A1%80-II/">SQL 基础 (II)</a>
+            
+        </section>
+
+
+    </article>
+    <script src="https://giscus.app/client.js"
+        data-repo="Regina-G-AK/Regina-G-AK.github.io"
+        data-repo-id="R_kgDONo7kgg"
+        data-category="General"
+        data-category-id="DIC_kwDONo7kgs4Cqtra"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+    </script>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Regina | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Regina">
+
+
+
+
+
+<title>大模型基础 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Regina&#39;s FM</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Regina&#39;s FM</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">大模型基础</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Regina</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 22, 2026&nbsp;&nbsp;20:33:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/LLM/">LLM</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-架构基石：Attention-机制及其演进"><a href="#1-架构基石：Attention-机制及其演进" class="headerlink" title="1. 架构基石：Attention 机制及其演进"></a>1. 架构基石：Attention 机制及其演进</h2><p>注意力机制是 Transformer 的核心，其演进目标主要在于平衡<strong>计算效率与表达能力</strong>。</p>
+<h3 id="1-1-基础注意力公式"><a href="#1-1-基础注意力公式" class="headerlink" title="1.1 基础注意力公式"></a>1.1 基础注意力公式</h3><p>$$Attention(Q, K, V) &#x3D; \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$</p>
+<ul>
+<li><p><strong>Self-Attention</strong>：$Q, K, V$ 均来自同一输入。加入掩码（Mask）后可实现因果推断：$\text{softmax}\left(\frac{MQK^T}{\sqrt{d_k}}\right)V$。</p>
+</li>
+<li><p><strong>Multi-Head Attention (MHA)</strong>：将特征投影到多个子空间并行计算，增强模型捕获多维度信息的能力。</p>
+</li>
+</ul>
+<h3 id="1-2-显存与计算优化"><a href="#1-2-显存与计算优化" class="headerlink" title="1.2 显存与计算优化"></a>1.2 显存与计算优化</h3><p>随着上下文长度（Context Length）的增加，$O(N^2)$ 的复杂度成为瓶颈。</p>
+<ul>
+<li><p><strong>Flash Attention</strong>：IO 感知型算法。利用 GPU SRAM 高速缓存进行计算，通过在线 Softmax 技巧避免将大尺寸的注意力矩阵写回显存（HBM），实现 2-4 倍加速。</p>
+</li>
+<li><p><strong>Sparse Attention</strong>：只计算局部或特定模式的注意力，将复杂度降为次线性。</p>
+</li>
+<li><p><strong>Linear Attention</strong>：利用核函数特性交换计算顺序（先算 $K^TV$），将复杂度降低至 $O(N)$。</p>
+</li>
+</ul>
+<h3 id="1-3-显存节省型变体（KV-Cache-优化）"><a href="#1-3-显存节省型变体（KV-Cache-优化）" class="headerlink" title="1.3 显存节省型变体（KV Cache 优化）"></a>1.3 显存节省型变体（KV Cache 优化）</h3><p>为了减少推理时 KV Cache 的显存占用：</p>
+<ul>
+<li><p><strong>Multi-Query Attention (MQA)</strong>：所有头共享一组 K、V。显著降低显存开销，但可能略微损失精度。</p>
+</li>
+<li><p><strong>Grouped-Query Attention (GQA)</strong>：MHA 与 MQA 的折中方案。将 Q 分组，每组共享一组 K、V，是目前 Llama 3 等主流模型标配。</p>
+</li>
+</ul>
+<h2 id="2-大规模分布式训练"><a href="#2-大规模分布式训练" class="headerlink" title="2. 大规模分布式训练"></a>2. 大规模分布式训练</h2><h3 id="2-1-数据并行（DP）与-ZeRO-优化"><a href="#2-1-数据并行（DP）与-ZeRO-优化" class="headerlink" title="2.1 数据并行（DP）与 ZeRO 优化"></a>2.1 数据并行（DP）与 ZeRO 优化</h3><p>ZeRO (Zero Redundancy Optimizer) 是 DeepSpeed 提出的核心技术，通过消除冗余提升显存利用率：</p>
+<ul>
+<li><p>ZeRO-1：对 <strong>优化器状态（Optimizer States）</strong> 进行分片。</p>
+</li>
+<li><p>ZeRO-2：进一步对 <strong>梯度（Gradients）</strong> 进行分片。</p>
+</li>
+<li><p>ZeRO-3：最彻底的分片，连 <strong>模型参数（Parameters）</strong> 也分布在不同卡上。计算时通过 <code>All-Gather</code>动态获取，用完即弃。</p>
+</li>
+</ul>
+<p>扩展：ZeRO-Offload 和 ZeRO-Infinity 将存储延伸至 CPU 内存乃至 NVMe 硬盘，实现小显存跑大模型。</p>
+<h3 id="2-2-模型并行（MP）"><a href="#2-2-模型并行（MP）" class="headerlink" title="2.2 模型并行（MP）"></a>2.2 模型并行（MP）</h3><ul>
+<li><p><strong>张量并行 (Tensor Parallelism, TP)</strong>：算子级拆分。将大矩阵乘法拆分到多个 GPU。通信频率极高，通常限制在 NVLink 内。以矩阵乘法 $Y &#x3D; XA$ 为例，将矩阵 $A$ 按列切分为 $A_1$ 和 $A_2$。GPU 0 计算 $XA_1$，GPU 1 计算 $XA_2$，最后通过通信（All-Gather）把结果拼起来。TP 的痛点：通信延迟。</p>
+</li>
+<li><p><strong>流水线并行 (Pipeline Parallelism, PP)</strong>：层级拆分。不同 GPU 负责模型的不同层。假设模型有 100 层，GPU 0 负责前 50 层，GPU 1 负责后 50 层。数据像传送带一样，先在 GPU 0 跑完，再传给 GPU 1。PP 的痛点：流水线气泡。（如果数据只是简单地从 GPU 0 传到 GPU 1，那么当 GPU 1 计算时，GPU 0 就在闲着。）为解决流水线气泡问题，通常结合 Micro-batch 技术提高吞吐。</p>
+</li>
+</ul>
+<h2 id="3-微调与人类偏好对齐-Alignment"><a href="#3-微调与人类偏好对齐-Alignment" class="headerlink" title="3.微调与人类偏好对齐 (Alignment)"></a>3.微调与人类偏好对齐 (Alignment)</h2><p>模型在预训练后拥有了知识，但需要通过对齐才能听懂指令并符合规范。</p>
+<h3 id="3-1-监督微调-SFT"><a href="#3-1-监督微调-SFT" class="headerlink" title="3.1 监督微调 (SFT)"></a>3.1 监督微调 (SFT)</h3><p>通过高质量的（Prompt, Response）对，让模型学习特定格式和风格。它是 RLHF 的基石。</p>
+<h3 id="3-2-强化学习家族-RLHF-Beyond"><a href="#3-2-强化学习家族-RLHF-Beyond" class="headerlink" title="3.2 强化学习家族 (RLHF &amp; Beyond)"></a>3.2 强化学习家族 (RLHF &amp; Beyond)</h3><p>为了解决 SFT 无法处理的偏好排序问题：</p>
+<ul>
+<li><p><strong>PPO (Proximal Policy Optimization)</strong>：传统 RLHF 核心。包含 Actor、Reference、Reward、Critic 四个模型，通过剪切机制保证策略平稳更新。</p>
+</li>
+<li><p><strong>DPO (Direct Preference Optimization)</strong>：目前的工业界主流。将 RL 问题转化成二元交叉熵损失，不需要训练Reward和Critic模型，训练更稳定高效。</p>
+</li>
+</ul>
+<p>$$L_{DPO} &#x3D; -\mathbb{E} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]$$</p>
+<ul>
+<li><p><strong>ORPO</strong>：单阶段对齐。在 SFT 阶段加入几率比（Odds Ratio）惩罚，直接区分好坏回答。</p>
+</li>
+<li><p><strong>GRPO (Group Relative Policy Optimization)</strong>：DeepSeek-R1 采用的核心技术。取消了 Critic 模型，改用群体评分（Group Relative）来计算优势函数，极大节省显存，特别适合逻辑推理任务。</p>
+</li>
+</ul>
+<p>$$Advantage_i&#x3D;\frac{Score_i-mean(Score)}{std(Score)}$$</p>
+<h2 id="4-采样生成"><a href="#4-采样生成" class="headerlink" title="4. 采样生成"></a>4. 采样生成</h2><p>推理阶段的采样参数直接决定了模型输出的质量和风格。</p>
+<h3 id="4-1-温度-Temperature"><a href="#4-1-温度-Temperature" class="headerlink" title="4.1 温度 (Temperature)"></a>4.1 温度 (Temperature)</h3><p>作用于 Softmax 前的 Logits：$P_i \propto \exp(Logit_i &#x2F; T)$。</p>
+<p>$$P_i &#x3D; \frac{\exp(q_i &#x2F; T)}{\sum_j \exp(q_j &#x2F; T)}$$</p>
+<ul>
+<li><p>$T \to 0$：趋近于 Greedy Search，输出确定、严谨。</p>
+</li>
+<li><p>$T &gt; 1$：分布变平坦，增加随机性与多样性，适合创作。</p>
+</li>
+</ul>
+<h3 id="4-2-概率过滤"><a href="#4-2-概率过滤" class="headerlink" title="4.2 概率过滤"></a>4.2 概率过滤</h3><ul>
+<li><p><strong>Top-k</strong>：取概率最高的前 k 个词。</p>
+</li>
+<li><p><strong>Top-p (核采样)</strong>：动态选择累积概率达到 $p$ 的最小词集。比 Top-k 更具适应性，因为候选词空间会随模型自信度动态调整。</p>
+</li>
+</ul>
+<h3 id="4-3-搜索算法"><a href="#4-3-搜索算法" class="headerlink" title="4.3 搜索算法"></a>4.3 搜索算法</h3><ul>
+<li><p>Greedy Search：每一步选最强词，易陷入局部最优。</p>
+</li>
+<li><p>Beam Search (束搜索)：保留 $k$ 个最有潜力的候选序列，平衡探索与利用。</p>
+</li>
+</ul>
+<h2 id="5-演进规律：Scaling-Laws"><a href="#5-演进规律：Scaling-Laws" class="headerlink" title="5. 演进规律：Scaling Laws"></a>5. 演进规律：Scaling Laws</h2><ul>
+<li><p>Kaplan Scaling Laws：早期研究认为参数量（N）对性能提升最明显，即使数据量（D）不够大，也可以靠模型规模硬堆。</p>
+</li>
+<li><p>Chinchilla Scaling Laws：后来的共识认为，模型参数（N）与数据量（D）应等比例增长。黄金准则：每增加 1 个模型参数，需要约 20 个 Token 的训练数据。</p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Regina</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2026/03/22/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">http://example.com/2026/03/22/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/LLM/"># LLM</a>
+                    
+                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"># 深度学习</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2026/02/25/SQL-%E4%BE%8B%E9%A2%98/">SQL 例题</a>
+            
+        </section>
+
+
+    </article>
+    <script src="https://giscus.app/client.js"
+        data-repo="Regina-G-AK/Regina-G-AK.github.io"
+        data-repo-id="R_kgDONo7kgg"
+        data-category="General"
+        data-category-id="DIC_kwDONo7kgs4Cqtra"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+    </script>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Regina | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

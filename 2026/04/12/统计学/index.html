@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Regina">
+
+
+
+
+
+<title>统计学 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Regina&#39;s FM</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Regina&#39;s FM</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">统计学</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Regina</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">四月 12, 2026&nbsp;&nbsp;16:46:51</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/data/">data</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="1-方差、协方差、相关系数、决定系数、误差"><a href="#1-方差、协方差、相关系数、决定系数、误差" class="headerlink" title="1. 方差、协方差、相关系数、决定系数、误差"></a>1. 方差、协方差、相关系数、决定系数、误差</h1><h2 id="1-1-方差"><a href="#1-1-方差" class="headerlink" title="1.1 方差"></a>1.1 方差</h2><p>方差：各数据与其平均数之差的平方的平均数，衡量一组数据或随机变量离散程度（波动大小）的度量。</p>
+<ul>
+<li>总体方差：$\sigma^2&#x3D;\frac{1}{n}\sum_{i&#x3D;1}^n(x_i-\mu)^2$</li>
+<li>样本方差：$s^2&#x3D;\frac{1}{n-1}\sum_{i&#x3D;1}^n(x_i-\bar{x})^2$</li>
+</ul>
+<p><em>为什么样本标准差使用被称为自由度的n-1，而总体的标准差使用n呢？</em></p>
+<p><em>这是因为自由度是指一组数据中可以自由取值的个数，当样本数据的个数为n时，其样本均值是确定的，只有n-1个数据可以自由取值，其中必有一个数据不能自由取值。所以，样本的标准差只能除以n-1，而不能除以n。如：假定一个样本有3个数值4、5、9，它的样本均值&#x3D;6，当我们自由取值4和9时，另一个数据就不能自由取值了，它必然取5这个数字。</em></p>
+<p>标准差是方差的平方根。</p>
+<h2 id="1-2-协方差"><a href="#1-2-协方差" class="headerlink" title="1.2 协方差"></a>1.2 协方差</h2><p>协方差是用于度量两个随机变量$X$和$Y$之间线性相关程度的统计量，符号通常为$Cov(X,Y)$。</p>
+<p>若协方差为正，变量同向变化；为负则反向变化；为零则表示无线性关系。</p>
+<p>$$Cov(X,Y)&#x3D;E[(X-E(X))(Y-E(Y))]$$</p>
+<h2 id="1-3-相关系数"><a href="#1-3-相关系数" class="headerlink" title="1.3 相关系数"></a>1.3 相关系数</h2><p>协方差的值会随着变量量纲的变化而变化，相关系数：$X,Y$的协方差除以$X,Y$的标准差的乘积。  </p>
+<p>解释：自变量X和因变量Y的协方差&#x2F;标准差的乘积。<br>$$r&#x3D;Corr(X,Y)&#x3D;\frac{Cov(X,Y)}{\sigma_X\sigma_Y}$$</p>
+<p><em>为什么要除标准差：标准化。即消除了X和Y自身变化的影响，只讨论两者之间关系。</em></p>
+<p><strong>相关系数是一种特殊的协方差。</strong></p>
+<h2 id="1-4-决定系数-R-2"><a href="#1-4-决定系数-R-2" class="headerlink" title="1.4 决定系数$R^2$"></a>1.4 决定系数$R^2$</h2><p>$R^2$的本质是衡量<strong>回归模型对数据的拟合程度</strong>，即模型能够解释因变量（目标变量）变异的比例。其取值范围通常在 <strong>0 到 1</strong> 之间：</p>
+<ul>
+<li>$R^2&#x3D;1$：模型完美拟合数据，所有数据点都被模型准确预测（理想情况，但几乎不可能）。</li>
+<li>$R^2&#x3D;0$：模型的预测能力与直接使用均值预测的效果一样，说明模型没有学习到有效信息。</li>
+<li>$R^2&lt;0$：模型比简单的均值预测还要差，可能是模型选择不当或过拟合&#x2F;欠拟合所致。</li>
+</ul>
+<p>$$R^2&#x3D;\frac{SSR}{SST}&#x3D;1-\frac{SSE}{SST}$$</p>
+<ul>
+<li>$SSR$：总平方和</li>
+<li>$SSE$：回归平方和</li>
+<li>$SST$：残差平方和</li>
+</ul>
+<p>所以$R^2$越接近1，模型拟合效果越好。</p>
+<p><strong>$R^2$只能衡量变量之间的统计关系，不能衡量因果关系。</strong></p>
+<p>例如，一个模型可能发现冰淇淋销量与溺水人数高度相关（高$R^2$），但这并不意味着冰淇淋销量会导致溺水事件。</p>
+<h2 id="1-5-误差"><a href="#1-5-误差" class="headerlink" title="1.5 误差"></a>1.5 误差</h2><p>误差是指<strong>观测值（或样本估计值）与真实值（理论真值）之间的偏离程度</strong>。</p>
+<h3 id="1-5-1-抽样误差"><a href="#1-5-1-抽样误差" class="headerlink" title="1.5.1 抽样误差"></a>1.5.1 抽样误差</h3><p>由于抽样的<strong>随机性</strong>而产生的误差。即使实验设计完美、测量仪器精准，只要是从总体中随机抽取样本，样本统计量就不可能完全等于总体参数。</p>
+<ul>
+<li>不可避免，但具有统计规律性。</li>
+<li>随着样本量（$n$）的增大而减小。</li>
+</ul>
+<h3 id="1-5-2-系统误差"><a href="#1-5-2-系统误差" class="headerlink" title="1.5.2 系统误差"></a>1.5.2 系统误差</h3><p>由于某种<strong>固定原因</strong>引起的倾向性偏离。它会导致观测值一致性地偏高或偏低。</p>
+<ul>
+<li>具有方向性（恒正或恒负）。</li>
+<li><strong>不能</strong>通过增加样本量来消除。</li>
+</ul>
+<h3 id="1-5-3-过失误差"><a href="#1-5-3-过失误差" class="headerlink" title="1.5.3 过失误差"></a>1.5.3 过失误差</h3><p>由于实验者主观上的<strong>粗心大意</strong>或意外事故导致的错误。</p>
+<ul>
+<li>数值通常极大，表现为“异常值”（Outliers）。</li>
+<li>必须在数据清理阶段通过统计检验剔除。</li>
+</ul>
+<h1 id="2-中心极限定理和大数定律"><a href="#2-中心极限定理和大数定律" class="headerlink" title="2. 中心极限定理和大数定律"></a>2. 中心极限定理和大数定律</h1><h2 id="2-1-中心极限定理"><a href="#2-1-中心极限定理" class="headerlink" title="2.1 中心极限定理"></a>2.1 中心极限定理</h2><p>对于来自同一分布且相互独立的随机变量序列，当样本数量足够大时，这些变量的均值或总和的分布会趋近于正态分布，无论单个随机变量本身的分布形态如何。例如，多次掷骰子，每次掷100次并计算平均值，重复多次后这些平均值会集中在理论均值3.5附近，呈现钟形曲线。</p>
+<p>用法：</p>
+<ol>
+<li>使用样本估算总体</li>
+<li>根据总体的平均值和标准差，判断某个样本是否属于总体</li>
+</ol>
+<h2 id="2-2-大数定律"><a href="#2-2-大数定律" class="headerlink" title="2.2 大数定律"></a>2.2 大数定律</h2><p>在随机试验中，每次出现的结果不同，但是大量重复试验出现的结果的平均值却几乎总是接近于某个确定的值。</p>
+<ul>
+<li>总体分布不要求是正态分布。</li>
+<li>抽取的样本要足够大（$\ge30$）。</li>
+</ul>
+<h1 id="3-条件概率与贝叶斯公式"><a href="#3-条件概率与贝叶斯公式" class="headerlink" title="3. 条件概率与贝叶斯公式"></a>3. 条件概率与贝叶斯公式</h1><h2 id="3-1-条件概率"><a href="#3-1-条件概率" class="headerlink" title="3.1 条件概率"></a>3.1 条件概率</h2><p>$$P(A|B)&#x3D;\frac{P(AB)}{P(B)}$$</p>
+<h2 id="3-2-独立事件"><a href="#3-2-独立事件" class="headerlink" title="3.2 独立事件"></a>3.2 独立事件</h2><p>满足$P(AB)&#x3D;P(A|B)P(B)&#x3D;P(A)P(B)$的事件。</p>
+<h2 id="3-3-贝叶斯定理"><a href="#3-3-贝叶斯定理" class="headerlink" title="3.3 贝叶斯定理"></a>3.3 贝叶斯定理</h2><p>$$P(A|B)&#x3D;\frac{P(AB)}{P(B)}&#x3D;\frac{P(A)P(B|A)}{P(B)}$$</p>
+<p>假设某种疾病的发病率是0.001，即1000人中会有1个人得病。现在有一种试剂可以检验患者是否得病，它的准确率是0.99，即在患者确实得病的情况下，它有99%的可能呈现阳性。它的误报率是5%，即在患者没有得病的情况下，它有5%的可能呈现阳性。</p>
+<p>求解：病人的检验结果为阳性，他确实得病的概率有多大？</p>
+<p>B：病人检验结果为阳性</p>
+<p>A：患病</p>
+<p>$P(A)&#x3D;0.001, P(B|A)&#x3D;0.99,P(B|A’)&#x3D;0.05$</p>
+<p>$P(B)&#x3D;P(B|A)P(A)+P(B|A’)P(A’)&#x3D;0.05094$</p>
+<p>$P(A|B)&#x3D;\frac{P(B|A)P(A)}{P(B)}&#x3D;1.94%$</p>
+<h1 id="4-统计量及其抽样分布"><a href="#4-统计量及其抽样分布" class="headerlink" title="4. 统计量及其抽样分布"></a>4. 统计量及其抽样分布</h1><h2 id="4-1-统计量"><a href="#4-1-统计量" class="headerlink" title="4.1 统计量"></a>4.1 统计量</h2><ol>
+<li>均值：数据集中所有数值的总和除以数值的数量。</li>
+<li>中位数：将数据集从小到大排列，位于中间的数值。</li>
+<li>众数：数据集中出现次数最多的数值。</li>
+<li>方差：数据点与其均值之差的平方和的平均值，反映数据的离散程度。</li>
+<li>标准差：方差的平方根，衡量数据的离散程度。</li>
+<li>变异系数（$CV$）：标准差除以平均值的比例，反映相对离散程度。<br>$$CV&#x3D;\frac{\sigma}{\mu}$$</li>
+<li>四分位数：将数据集分为四等份的三个点。</li>
+<li>偏度：衡量数据分布的不对称程度。<br>$$Skewness&#x3D;\frac{n}{(n-1)(n-2)}\sum_{i&#x3D;1}^n(\frac{x_i-\bar{x}}{\sigma})^3$$</li>
+<li>峰度：反映数据分布峰部的尖锐程度及尾部的厚度。<br>$$Kurtosis&#x3D;\frac{n(n+1)}{(n-1)(n-2)(n-3)}\sum_{i&#x3D;1}^n(\frac{x_i-\bar{x}}{\sigma})^4-\frac{3(n-1)^2}{(n-2)(n-3)}$$</li>
+<li>$k$阶矩：随机变量$X$关于<strong>原点</strong>的$k$次方的期望。<ul>
+<li>公式：<ul>
+<li>离散型：$\mu_k&#x3D;E(X^k)&#x3D;\sum x_i^kP(X&#x3D;x_i)$</li>
+<li>连续型：$\mu_k&#x3D;E(X^k)&#x3D;\int_{-\infty}^{\infty}x^k\cdot f(x)dx$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>$k$阶中心距：随机变量$X$关于自身均值$\mu &#x3D; E[X]$ 的$k$次方的期望。<ul>
+<li>公式：<ul>
+<li>离散型：$\mu_k’&#x3D;E[(X-\mu)^k]&#x3D;\sum (x_i-\mu)^k\cdot P(X&#x3D;x_i)$</li>
+<li>连续型：$\mu_k’&#x3D;E[(X-\mu)^k]&#x3D;\int_{-\infty}^\infty (x-\mu)^k\cdot f(x)dx$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-2-分布"><a href="#4-2-分布" class="headerlink" title="4.2 分布"></a>4.2 分布</h2><ol>
+<li>抽样分布：从<strong>同一个总体</strong>中，<strong>反复</strong>随机抽取<strong>容量固定为$n$</strong> 的样本，计算某个统计量（如样本均值$\bar{X}$、样本比例$\hat{p}$​、样本方差$S^2$等），这些统计量所有可能取值的<strong>概率分布</strong>，就叫该统计量在样本量$n$时的<strong>抽样分布</strong>。</li>
+<li>渐近分布：当样本量$n\rightarrow \infty$时，统计量的抽样分布趋近于的那个极限分布。（通常是<strong>正态分布</strong>）</li>
+<li>近似分布：实际使用中，我们用某种分布来近似代替真实的抽样分布。</li>
+</ol>
+<h2 id="4-3-由正态分布导出的几个重要分布"><a href="#4-3-由正态分布导出的几个重要分布" class="headerlink" title="4.3 由正态分布导出的几个重要分布"></a>4.3 由正态分布导出的几个重要分布</h2><h3 id="4-3-1-卡方分布"><a href="#4-3-1-卡方分布" class="headerlink" title="4.3.1 卡方分布"></a>4.3.1 卡方分布</h3><p>设$Z_1,Z_2 , …, Z_k$是$k$个相互独立的标准正态随机变量（即每个$Z_i\sim N(0,1)$）， 则它们的平方和$X&#x3D;Z_1^2+Z_2^2+\dots+Z_k^2$服从自由度为$k$的卡方分布，记作$X\sim \chi^2(k)$</p>
+<ul>
+<li>概率密度函数($x&gt;0$)：<br>$$f(x)&#x3D;\frac{1}{2^{n&#x2F;2}\Gamma(k&#x2F;2)}x^{\frac{n}{2}-1}e^{-x&#x2F;2}$$</li>
+<li>$k$越小$\rightarrow$越右偏，越不对称，从0开始很高</li>
+<li>$k$越大$\rightarrow$逐渐对称，峰值向$k$靠拢，越来越像正态<br><strong>卡方统计量</strong>：检查两个分类变量是否相关，或一个分类变量的实际分布是否符合预期分布。	$$\chi^2&#x3D;\sum\frac{(O_i-E_i)^2}{E_i}$$</li>
+</ul>
+<p><strong>卡方检验</strong>：通过比较实际观测频数与理论期望频数($\chi^2$)的差异来评估拟合优度或两个定类变量的独立性。其核心是若零假设成立，统计量近似服从自由度为$k$的卡方分布。</p>
+<p><strong>常见使用场景</strong>：研究吸烟与肺癌之间的关系，或者分析消费者对不同品牌的偏好是否存在显著差异。</p>
+<ul>
+<li>独立性检验（Chi-square Test for Independence）：最常见的应用之一，用于判断两个分类变量之间是否独立无关。例如，判断性别（男、女）与偏好的颜色（红、蓝）是否独立。</li>
+<li>拟合优度检验（Chi-square Goodness-of-Fit Test）：用于判断一组观测频数是否符合特定的理论分布。例如，判断一个骰子是否公平（每个面出现的概率相等）。</li>
+<li>同质性检验（Chi-square Test for Homogeneity）：用于比较两个或多个群体或样本分布是否相同。例如，不同年龄组的人在饮食习惯上是否存在显著差异。</li>
+</ul>
+<h3 id="4-3-2-t分布"><a href="#4-3-2-t分布" class="headerlink" title="4.3.2 t分布"></a>4.3.2 t分布</h3><p><a target="_blank" rel="noopener" href="https://sm.ms/LZ3j"><img src="https://files.seeusercontent.com/2026/04/12/Id5u/Pasted-image-20260310083517.png" alt="Pasted image 20260310083517.png" /></a></p>
+<p>和标准正态分布（或 z 分布）一样，<em>t</em> 分布的均值是 0。<em>t</em> 分布是通过自由度定义的。这些与样本量大小相关。</p>
+<p>在样本大小至少等于 30 的情况下，可以使用 z 分布（正态分布）来代替 <em>t</em> 分布。当样本量大小足够大时，在统计方法中将使用 z 分布来代替 <em>t</em> 分布。</p>
+<p><strong>t统计量</strong>：<br>$$t&#x3D;\frac{\bar{x}-\mu}{s&#x2F;\sqrt{n}}$$</p>
+<p>$\bar{x}$是样本均值，$\mu$是总体均值，$s$是样本标准差，$n$是样本大小。</p>
+<p>t分布用于假设检验，接受还是拒绝零假设。图上的中心区域是接受区域，两侧尾部是拒绝区域。</p>
+<h3 id="4-3-3-F分布"><a href="#4-3-3-F分布" class="headerlink" title="4.3.3 F分布"></a>4.3.3 F分布</h3><p>设$U\sim \chi^2(d_1)$为自由度为$d_1$的卡方分布，$V\sim \chi^2(d_2)$为自由度为$d_2$的卡方分布，且$U$与$V$相互独立，那么随机变量$$F&#x3D;\frac{U&#x2F;d_1}{V&#x2F;d_2}$$服从<strong>自由度为$(d_1,d_2)$的F分布</strong>，记为$$F\sim F(d_1,d_2)$$</p>
+<p><strong>基本性质</strong></p>
+<ul>
+<li><strong>偏态</strong>：F分布是一种右偏（正偏）分布，随着$d_1$与$d_2$的变化形状各不相同。</li>
+<li><strong>非负</strong>：$F\ge 0$，其值域从0到$+\infty$</li>
+</ul>
+<p><strong>应用场景</strong></p>
+<ol>
+<li><strong>方差分析</strong><ul>
+<li><strong>多组均值比较</strong>：例如比较$k$个总体的均值是否存在显著差异。</li>
+<li><strong>F统计量</strong>：将总变异拆分成组间变异和组内变异，构造$$F&#x3D;\frac{\text{组间均方}}{\text{组内均方}}$$在原假设“所有均值相等”下，该统计量服从F分布，若观测到的F值过大，则拒绝原假设。</li>
+</ul>
+</li>
+<li><strong>回归模型整体显著性检验</strong><ul>
+<li>在多元线性回归$y&#x3D;\beta_0+\beta_1x_1+\dots+\beta_k x_k+\epsilon$，检验所有$\beta_i$是否同时为0，即模型是否有解释力。</li>
+<li><strong>F统计量</strong>：$$F&#x3D;\frac{SSR&#x2F;k}{SSE&#x2F;(n-k-1)}$$其中$SSR$为回归平方和，$SSE$为误差平方和，$n$为样本量。若$F$值过大，说明模型整体显著。</li>
+</ul>
+</li>
+<li><strong>比较两个总体方差是否相等</strong><ul>
+<li>假设两总体分别服从正态分布，现有各自的样本方差$S_1^2,S_2^2$，希望检验$$H_0:\sigma_1^2&#x3D;\sigma_2^2$$</li>
+<li><strong>F统计量</strong>：$$F&#x3D;\frac{S_1^2}{S_2^2}$$若在原假设下该F值落在极端区间，则表明方差可能不相等。</li>
+</ul>
+</li>
+</ol>
+<h1 id="5-参数估计"><a href="#5-参数估计" class="headerlink" title="5. 参数估计"></a>5. 参数估计</h1><h2 id="5-1-点估计"><a href="#5-1-点估计" class="headerlink" title="5.1 点估计"></a>5.1 点估计</h2><p>点估计一般解决的问题是总体$X$的分布函数$F(X,\theta)$形式为已知，但是$\theta$参数未知。点估计的目的是通过样本$X_1,X_2,\dots,X_n$构造一个适当的统计量$\theta’(X_1,X_2,\dots,X_n)$，用于作为未知参数$\theta$的近似值。</p>
+<h3 id="5-1-1-矩估计法"><a href="#5-1-1-矩估计法" class="headerlink" title="5.1.1 矩估计法"></a>5.1.1 矩估计法</h3><p>设$X$为连续型随机变量，其概率密度函数为$f(x;\theta_1,\theta_2,\dots,\theta_k)$；总体$k$阶矩为$$\mu_k&#x3D;\int_{-\infty}^\infty x^kf(x;\theta_1,\theta_2,\dots,\theta_k)dx$$</p>
+<p>设$X$为离散型随机变量，其分布律为$P(X&#x3D;x)&#x3D;p(x;\theta_1,\theta_2,\dots,\theta_k)$；总体$k$阶矩为$$\mu_k&#x3D;\sum_{x\in R_x}x^kp(x;\theta_1,\theta_2,\dots,\theta_k)$$其中$R_x$为$x$可能取值范围。</p>
+<p>样本$X_1,X_2,\dots,X_k$的样本$k$阶矩为$$A_i&#x3D;\frac{1}{n}\sum_{i&#x3D;1}^nX_i^k$$<br>由于总体的$k$阶矩往往是未知参数$\theta$的函数，因此常常先用总体的$k$阶矩$\mu_k$将参数$\theta$表示出来，然后用样本矩$A_k$代替$\mu_k$，进而得出估计的$\theta$的值。</p>
+<p><a target="_blank" rel="noopener" href="https://sm.ms/Zrv8"><img src="https://files.seeusercontent.com/2026/04/12/v5bW/Pasted-image-20260313161825.png" alt="Pasted image 20260313161825.png" /></a></p>
+<h3 id="5-1-2-最大似然估计法"><a href="#5-1-2-最大似然估计法" class="headerlink" title="5.1.2 最大似然估计法"></a>5.1.2 最大似然估计法</h3><p>设$X_1,X_2,\dots,X_k$为离散型变量，其联合概率为$\Pi_{i&#x3D;1}^np(x_i;\theta)$，其中$x_i$是$X_i$相应的观测值，则上面的联合概率实际上是参数$\theta$的函数，记为$$L(\theta)&#x3D;\Pi_{i&#x3D;1}^np(x_i;\theta)$$ $L(\theta)$被称为样本的似然函数。</p>
+<p><a target="_blank" rel="noopener" href="https://sm.ms/Shf4"><img src="https://files.seeusercontent.com/2026/04/12/Lhy3/Pasted-image-20260313163215.png" alt="Pasted image 20260313163215.png" /></a></p>
+<p>设$X$为连续型变量，其概率密度函数为$f(x,\theta)$，则当前样本$X_1,X_2,\dots,X_n$的联合概率密度函数$\Pi_{i&#x3D;1}^nf(x_i;\theta)$，其中$x_1,x_2,\dots,x_n$是相应于样本的一个样本值，则随机点落在$(x_1,x_2,\dots,x_n)$的领域内概率近似于$$\Pi_{i&#x3D;1}^nf(x_i;\theta)dx_i$$</p>
+<p><a target="_blank" rel="noopener" href="https://sm.ms/KqTF"><img src="https://files.seeusercontent.com/2026/04/12/Oq0m/Pasted-image-20260313172133.png" alt="Pasted image 20260313172133.png" /></a></p>
+<h2 id="5-2-区间估计"><a href="#5-2-区间估计" class="headerlink" title="5.2 区间估计"></a>5.2 区间估计</h2><p>对于总体中的未知参数，我们的估计总是存在着一定的误差的，如何去衡量这个误差是一个需要考虑的事情。同时，除了上面的点估计，在实际中我们往往还希望估计出参数的一个范围，同时参数落在这个范围的概率，或者是说可信程度。</p>
+<p>区间估计即是估计参数落在某个范围以及落在这个范围的可信程度。</p>
+<h3 id="5-2-1-正态分布均值与方差的区间估计"><a href="#5-2-1-正态分布均值与方差的区间估计" class="headerlink" title="5.2.1 正态分布均值与方差的区间估计"></a>5.2.1 正态分布均值与方差的区间估计</h3><h4 id="5-2-1-1-单个正态分布"><a href="#5-2-1-1-单个正态分布" class="headerlink" title="5.2.1.1 单个正态分布"></a>5.2.1.1 单个正态分布</h4><p>下面的关于单个正态分布的讨论都是基于以下假设：给定置信水平为$1-\alpha$, 设$X_1,X_2,\dots,X_n$为总体$N(\mu,\sigma^2)$的样本，$\bar{X},S^2$分别是样本的期望和方差。</p>
+<ol>
+<li><strong>估计期望$\mu$的置信区间</strong><ul>
+<li><strong>总体方差$\sigma^2$已知</strong><br>  由于 $\frac{\bar{X}-\mu}{\sigma&#x2F;\sqrt{n}} \sim N(0, 1)$，其置信区间为：<br>  $$\left[ \bar{X} - \frac{\sigma}{\sqrt{n}}z_{\alpha&#x2F;2}, \bar{X} + \frac{\sigma}{\sqrt{n}}z_{\alpha&#x2F;2} \right]$$<br>  其中 $z_{\alpha&#x2F;2}$ 是标准正态分布的上 $\alpha&#x2F;2$ 分位数。</li>
+<li><strong>总体方差$\sigma^2$未知</strong><br>  由于 $\frac{\bar{X}-\mu}{S&#x2F;\sqrt{n}} \sim t(n-1)$，使用样本标准差 $S$ 代替 $\sigma$，其置信区间为：<br>   $$\left[ \bar{X} - \frac{S}{\sqrt{n}}t_{\alpha&#x2F;2}(n-1), \bar{X} + \frac{S}{\sqrt{n}}t_{\alpha&#x2F;2}(n-1) \right]$$<br>   其中 $t_{\alpha&#x2F;2}(n-1)$ 是自由度为 $n-1$ 的 $t$ 分布的上 $\alpha&#x2F;2$ 分位数。</li>
+</ul>
+</li>
+<li><strong>估计方差 $\sigma^2$ 的置信区间</strong><br> 由于 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$，其置信区间为：<br> $$\left[ \frac{(n-1)S^2}{\chi^2_{\alpha&#x2F;2}(n-1)}, \frac{(n-1)S^2}{\chi^2_{1-\alpha&#x2F;2}(n-1)} \right]$$</li>
+</ol>
+<h4 id="5-2-1-2-两个正态分布"><a href="#5-2-1-2-两个正态分布" class="headerlink" title="5.2.1.2 两个正态分布"></a>5.2.1.2 两个正态分布</h4><p>设两个独立总体 $X \sim N(\mu_1, \sigma_1^2)$ 和 $Y \sim N(\mu_2, \sigma_2^2)$，样本量分别为 $n_1, n_2$。</p>
+<ol>
+<li><strong>均值差 $\mu_1 - \mu_2$ 的置信区间</strong></li>
+</ol>
+<ul>
+<li><strong>若 $\sigma_1^2, \sigma_2^2$ 均已知：</strong><br>  $$\left[ (\bar{X}-\bar{Y}) \pm z_{\alpha&#x2F;2} \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}} \right]$$</li>
+<li><strong>若 $\sigma_1^2 &#x3D; \sigma_2^2 &#x3D; \sigma^2$ 但未知（采用联合方差 $S_p^2$）：</strong><br>  $$\left[ (\bar{X}-\bar{Y}) \pm t_{\alpha&#x2F;2}(n_1+n_2-2) \cdot S_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} \right]$$<br>  其中 $S_p^2 &#x3D; \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}$。</li>
+</ul>
+<ol start="2">
+<li><strong>方差比 $\sigma_1^2 &#x2F; \sigma_2^2$ 的置信区间</strong><br>利用 $F$ 分布：$\frac{S_1^2 &#x2F; \sigma_1^2}{S_2^2 &#x2F; \sigma_2^2} \sim F(n_1-1, n_2-1)$，其置信区间为：</li>
+</ol>
+<p>$$\left[ \frac{S_1^2}{S_2^2} \frac{1}{F_{\alpha&#x2F;2}(n_1-1, n_2-1)}, \frac{S_1^2}{S_2^2} \frac{1}{F_{1-\alpha&#x2F;2}(n_1-1, n_2-1)} \right]$$</p>
+<h3 id="5-2-2-单侧置信区间"><a href="#5-2-2-单侧置信区间" class="headerlink" title="5.2.2 单侧置信区间"></a>5.2.2 单侧置信区间</h3><p>在某些实际问题中，我们只关心参数的上限或下限。例如，评估某种药品的杂质含量时只关心上限。</p>
+<ul>
+<li><strong>置信下限</strong>：若 $P(\theta \ge \underline{\theta}) &#x3D; 1-\alpha$，则 $[\underline{\theta}, +\infty)$ 称为参数 $\theta$ 的置信水平为 $1-\alpha$ 的单侧置信区间。</li>
+<li><strong>置信上限</strong>：若 $P(\theta \le \bar{\theta}) &#x3D; 1-\alpha$，则 $(-\infty, \bar{\theta}]$ 称为参数 $\theta$ 的置信水平为 $1-\alpha$ 的单侧置信区间。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：在计算单侧区间时，分位数通常取 $\alpha$ 而不是 $\alpha&#x2F;2$。例如，$\sigma^2$ 已知时 $\mu$ 的单侧置信上限为：</p>
+<p>$$\left( -\infty, \bar{X} + \frac{\sigma}{\sqrt{n}}z_{\alpha} \right]$$</p>
+</blockquote>
+<h1 id="6-数据类型"><a href="#6-数据类型" class="headerlink" title="6. 数据类型"></a>6. 数据类型</h1><p>统计数据可分为四种类型（级别从低到高）：定类数据&#x2F;定序数据&#x2F;定距数据&#x2F;定比数据。</p>
+<ul>
+<li>定类数据仅标识不同的类别，没有次序关系（eg：汉族、藏族、回族）；</li>
+<li>定序数据用数字表示某个有序状态所处的位置，可以比较大小（有次序），但是不能做四则预算（eg：年龄划分为老、中、青）；</li>
+<li>定距数据是具有间距的变量，有单位，无零点，只能加减不能乘除（eg：智商120，比智商60要高60，但不能说前者智商是后者两倍，因为智商为0不是绝对零点，不代表没有智商）；</li>
+<li>定比数据除了有定局数据的特性之外，还有一个绝对零点，所以能加减也能乘除（eg：60元比30元多30元，且前者是后者的两倍）。</li>
+</ul>
+<p>当定性变量含有m个类别时，模型不能引入m个虚拟变量。最多只能引入m-1个虚拟变量，否则当模型中存在截距项时就会产生完全多重共线性，无法估计回归参数。商品包装外观因素有4种颜色，所以这是一个含有4个类别的定性变量，应该向模型引入3个虚拟变量，如果引入4个，则无法估计回归参数。  </p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Regina</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2026/04/12/%E7%BB%9F%E8%AE%A1%E5%AD%A6/">http://example.com/2026/04/12/%E7%BB%9F%E8%AE%A1%E5%AD%A6/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/data/"># data</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2026/03/22/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80/">大模型基础</a>
+            
+        </section>
+
+
+    </article>
+    <script src="https://giscus.app/client.js"
+        data-repo="Regina-G-AK/Regina-G-AK.github.io"
+        data-repo-id="R_kgDONo7kgg"
+        data-category="General"
+        data-category-id="DIC_kwDONo7kgs4Cqtra"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+    </script>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Regina | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
